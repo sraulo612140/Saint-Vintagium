@@ -192,27 +192,27 @@ def build(bld):
 	includes = ['server', 'client', 'client/vgui', 'common/soundlib', 'platform']
 
 	# basic build: dedicated only
-	source = bld.path.ant_glob(['common/*.c', 'common/imagelib/*.c', 'common/soundlib/*.c', 'server/*.c', 'common/http/*.c'])
+	source = bld.path.ant_glob(['common/*.cpp', 'common/imagelib/*.cpp', 'common/soundlib/*.cpp', 'server/*.cpp', 'common/http/*.cpp'])
 
 	# include platform-specific sources, this shall not fail if directory doesn't exist
-	source += bld.path.ant_glob('platform/%s/*.c' % bld.env.DEST_OS)
+	source += bld.path.ant_glob('platform/%s/*.cpp' % bld.env.DEST_OS)
 
 	# Android _is_ Linux based, after all
 	if bld.env.DEST_OS == 'android':
-		source += bld.path.ant_glob('platform/linux/*.c')
+		source += bld.path.ant_glob('platform/linux/*.cpp')
 
 	# include common POSIX conformant code
 	if bld.env.DEST_OS == 'ps4':
 		# kernel loads modules, see platform/ps4/lib_ps4.c
-		source += bld.path.ant_glob('platform/posix/*.c', excl='platform/posix/lib_posix.c')
+		source += bld.path.ant_glob('platform/posix/*.cpp', excl='platform/posix/lib_posix.c')
 	elif bld.env.DEST_OS not in ['win32', 'dos']:
-		source += bld.path.ant_glob('platform/posix/*.c')
+		source += bld.path.ant_glob('platform/posix/*.cpp')
 	if bld.env.IOS:
-		source += bld.path.ant_glob('platform/ios/*.c')
+		source += bld.path.ant_glob('platform/ios/*.cpp')
 		source += bld.path.ant_glob('platform/ios/*.m')
 		includes += bld.path.ant_glob('platform/ios')
 	elif bld.env.DEST_OS == 'darwin':
-		source += bld.path.ant_glob('platform/apple/*.c')
+		source += bld.path.ant_glob('platform/apple/*.cpp')
 	
 	# include sources for optional features
 	if bld.get_define('XASH_CUSTOM_SWAP'):
@@ -280,13 +280,13 @@ def build(bld):
 		defines = []
 		if bld.env.XASH_SDL:
 			libs += ['SDL%d' % bld.env.XASH_SDL]
-			source += bld.path.ant_glob(['platform/sdl%d/*.c' % bld.env.XASH_SDL])
+			source += bld.path.ant_glob(['platform/sdl%d/*.cpp' % bld.env.XASH_SDL])
 			defines += ['XASH_SDL=%d' % bld.env.XASH_SDL]
 
 		# GPU device for the OpenGL layer in ref_gl, see ref/gl/gnm_shim
 		if bld.env.DEST_OS == 'ps4':
 			libs += ['opengnm', 'PS4CLIENT_SYS']
-			source += bld.path.ant_glob('platform/ps4/gnm/*.c')
+			source += bld.path.ant_glob('platform/ps4/gnm/*.cpp')
 
 		if bld.get_define('HAVE_FFMPEG'):
 			libs.append('SWRESAMPLE')
@@ -297,11 +297,11 @@ def build(bld):
 
 		# add client files
 		if not bld.env.DEDICATED:
-			source += bld.path.ant_glob('client/**/*.c')
+			source += bld.path.ant_glob('client/**/*.cpp')
 			libs += ['bzip2', 'mpg123', 'MultiEmulator', 'opus', 'opusfile', 'vorbis', 'vorbisfile']
 
 			if bld.env.SAILFISH:
-				source += bld.path.ant_glob('platform/sailfish/*.c')
+				source += bld.path.ant_glob('platform/sailfish/*.cpp')
 				libs += ['GIO', 'AUDIORESOURCE', 'WAYLAND_CLIENT']
 
 		# Android port is linked differently

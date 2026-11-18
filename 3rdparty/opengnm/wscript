@@ -10,7 +10,7 @@ def configure(conf):
 
 def build(bld):
 	bld.stlib(
-		source = bld.path.ant_glob('opengnm/src/**/*.c', excl = 'opengnm/src/*_generic.c'),
+		source = bld.path.ant_glob('opengnm/src/**/*.cpp', excl = 'opengnm/src/*_generic.c'),
 		target = 'opengnm',
 		features = 'c',
 		includes = ['opengnm/include', 'opengnm/src'],

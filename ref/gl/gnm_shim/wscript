@@ -79,7 +79,7 @@ def build(bld):
 	gnm_shaders = bld.path.get_bld().make_node('gnm_shaders.c')
 	bld(rule = gnm_shaders_c, source = shaders, target = gnm_shaders, name = 'gnm-shaders')
 
-	bld.stlib(source = bld.path.ant_glob('*.c') + [gnm_shaders],
+	bld.stlib(source = bld.path.ant_glob('*.cpp') + [gnm_shaders],
 		target = 'gnm_shim',
 		features = 'c',
 		includes = ['.', '..', bld.srcnode.find_dir('engine/platform/ps4/gnm')],

@@ -313,7 +313,7 @@ static void AVI_HandleAudio( movie_state_t *Avi, const AVFrame *frame )
 		Avi->cached_audio_buf_len = len;
 		Avi->cached_audio_pos = 0;
 		Avi->cached_audio_len = 0;
-		Avi->cached_audio = Mem_Malloc( avi_mempool, len );
+		Avi->cached_audio = static_cast<byte*>( Mem_Malloc( avi_mempool, len ));
 	}
 	else
 	{
@@ -329,7 +329,7 @@ static void AVI_HandleAudio( movie_state_t *Avi, const AVFrame *frame )
 		{
 			// Con_Printf( "%s: resizing old buffer of size %d to size %d\n", __func__, Avi->cached_audio_buf_len, len + Avi->cached_audio_buf_len );
 			Avi->cached_audio_buf_len = len + Avi->cached_audio_len;
-			Avi->cached_audio = Mem_Realloc( avi_mempool, Avi->cached_audio, Avi->cached_audio_buf_len );
+			Avi->cached_audio = static_cast<byte*>( Mem_Realloc( avi_mempool, Avi->cached_audio, Avi->cached_audio_buf_len ));
 		}
 	}
 

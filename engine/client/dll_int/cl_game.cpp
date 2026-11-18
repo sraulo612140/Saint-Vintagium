@@ -1008,8 +1008,8 @@ void CL_InitEdicts( int maxclients )
 	CL_UPDATE_BACKUP = ( maxclients <= 1 ) ? SINGLEPLAYER_BACKUP : MULTIPLAYER_BACKUP;
 #endif
 	cls.num_client_entities = CL_UPDATE_BACKUP * NUM_PACKET_ENTITIES;
-	cls.packet_entities = Mem_Realloc( clgame.mempool, cls.packet_entities, sizeof( entity_state_t ) * cls.num_client_entities );
-	clgame.entities = Mem_Calloc( clgame.mempool, sizeof( cl_entity_t ) * clgame.maxEntities );
+	cls.packet_entities = static_cast<entity_state_t*>( Mem_Realloc( clgame.mempool, cls.packet_entities, sizeof( entity_state_t ) * cls.num_client_entities ));
+	clgame.entities = static_cast<cl_entity_t*>( Mem_Calloc( clgame.mempool, sizeof( cl_entity_t ) * clgame.maxEntities ));
 	clgame.static_entities = NULL; // will be initialized later
 	clgame.numStatics = 0;
 
@@ -1145,7 +1145,7 @@ static void Mod_LoadMapSprite( model_t *mod, const void *buffer, size_t size, qb
 	temp.type = pix->type;
 	temp.flags = pix->flags;
 	temp.size = w * h * PFDesc[temp.type].bpp;
-	temp.buffer = Mem_Malloc( mod->mempool, temp.size );
+	temp.buffer = static_cast<byte*>( Mem_Malloc( mod->mempool, temp.size ));
 	temp.palette = NULL;
 
 	// chop the image and upload into video memory

@@ -16,7 +16,7 @@ def build(bld):
 	if bld.env.DISABLE_UTILS_MDLDEC:
 		return
 
-	bld.program(source   = bld.path.ant_glob('*.c'),
+	bld.program(source   = bld.path.ant_glob('*.cpp'),
 		target   = 'mdldec',
 		includes = '.',
 		use      = 'engine_includes public M werror yy_thunks',

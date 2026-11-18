@@ -36,7 +36,7 @@ def build(bld):
 	if bld.env.DEST_OS == 'ps4':
 		libs += [ 'gnm_shim' ]
 
-	source = bld.path.ant_glob(['*.c', 'gl2_shim/*.c'])
+	source = bld.path.ant_glob(['*.cpp', 'gl2_shim/*.cpp'])
 	includes = '.'
 
 	targets = {

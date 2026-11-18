@@ -16,7 +16,7 @@ def build(bld):
 	if bld.env.DISABLE_UTILS_XCF:
 		return
 
-	bld.stlib(source = bld.path.ant_glob(['*.c', '*.h'], excl='main.c'),
+	bld.stlib(source = bld.path.ant_glob(['*.cpp', '*.h'], excl='main.c'),
 		target = 'xcflib',
 		features = 'format',
 		includes = '.',

@@ -14,7 +14,7 @@ def build(bld):
 	if not bld.env.ENABLE_UTILS_XAR:
 		return
 
-	bld.program(source   = bld.path.ant_glob('*.c'),
+	bld.program(source   = bld.path.ant_glob('*.cpp'),
 		target   = 'xar',
 		includes = '.',
 		use      = 'public filesystem_includes werror yy_thunks',

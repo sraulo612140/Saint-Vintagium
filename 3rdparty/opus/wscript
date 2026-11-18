@@ -102,10 +102,10 @@ def configure(conf):
 
 def build(bld):
 	sources = bld.path.ant_glob([
-		'opus/src/*.c',
-		'opus/celt/*.c',
-		'opus/silk/*.c',
-		'opus/silk/float/*.c'
+		'opus/src/*.cpp',
+		'opus/celt/*.cpp',
+		'opus/silk/*.cpp',
+		'opus/silk/float/*.cpp'
 	], excl = [
 		'opus/src/repacketizer_demo.c',
 		'opus/src/opus_demo.c',
@@ -117,7 +117,7 @@ def build(bld):
 
 	if bld.env.DEST_CPU in ['thumb', 'arm']:
 		if bld.env.HAVE_NEON:
-			sources += bld.path.ant_glob(['opus/silk/arm/*.c', 'opus/celt/arm/*.c'])
+			sources += bld.path.ant_glob(['opus/silk/arm/*.cpp', 'opus/celt/arm/*.cpp'])
 			includes += ['opus/silk/arm', 'opus/celt/arm']
 	elif bld.env.DEST_CPU.startswith('x86'):
 		sources += ['opus/silk/x86/x86_silk_map.c',

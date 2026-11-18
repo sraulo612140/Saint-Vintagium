@@ -509,7 +509,7 @@ void VOX_LoadSound( channel_t *ch, const char *pszin )
 	}
 
 	// words_buf[j].sfx is already NULL from the memset — null terminator
-	ch->words = Mem_Malloc( sndpool, ( j + 1 ) * sizeof( voxword_t ));
+	ch->words = static_cast<byte*>( Mem_Malloc( sndpool, ( j + 1 ) * sizeof( voxword_t )));
 	memcpy( ch->words, words_buf, ( j + 1 ) * sizeof( voxword_t ));
 
 	ch->sfx = ch->words[0].sfx;

@@ -997,7 +997,7 @@ qboolean CL_DemoReadMessage( byte *buffer, size_t *length )
 			return false; // header is ended, skip frame
 		case dem_userdata:
 			FS_Read( cls.demofile, &size, sizeof( int ));
-			userbuf = Mem_Malloc( cls.mempool, size );
+			userbuf = static_cast<byte*>( Mem_Malloc( cls.mempool, size ));
 			FS_Read( cls.demofile, userbuf, size );
 
 			if( clgame.hInstance )

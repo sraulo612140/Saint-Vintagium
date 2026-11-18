@@ -29,7 +29,7 @@ static void Sound_Reset( void )
 
 static MALLOC_LIKE( FS_FreeSound, 1 ) wavdata_t *SoundPack( void )
 {
-	wavdata_t *pack = Mem_Malloc( host.soundpool, sizeof( *pack ) + sound.size );
+	wavdata_t *pack = static_cast<byte*>( Mem_Malloc( host.soundpool, sizeof( *pack ) + sound.size ));
 
 	pack->size = sound.size;
 	pack->loop_start = sound.loopstart;

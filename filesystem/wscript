@@ -42,7 +42,7 @@ def build(bld):
 
 	bld.shlib(target = 'filesystem_stdio',
 		features = 'seq format',
-		source = bld.path.ant_glob(['*.c', '*.cpp']),
+		source = bld.path.ant_glob(['*.cpp', '*.cpp']),
 		use = libs,
 		install_path = bld.env.LIBDIR)
 

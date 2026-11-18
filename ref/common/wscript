@@ -17,7 +17,7 @@ def build(bld):
 	else:
 		use += ['public']
 
-	bld.stlib(source = bld.path.ant_glob('*.c'),
+	bld.stlib(source = bld.path.ant_glob('*.cpp'),
 		target = 'ref_common',
 		includes = '.',
 		features = 'format',

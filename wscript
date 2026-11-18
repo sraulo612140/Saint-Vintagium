@@ -411,6 +411,15 @@ def configure(conf):
 	cflags, linkflags = conf.get_optimization_flags()
 	cxxflags = list(cflags) # optimization flags are common between C and C++ but we need a copy
 
+	# C++20 standard
+	if conf.env.COMPILER_CC == 'msvc':
+		conf.env.CXXFLAGS += ['/std:c++20']
+	else:
+		conf.env.CXXFLAGS += ['-std=c++20']
+
+	# Disable C++ exceptions and RTTI
+	conf.env.CXXFLAGS += ['-fno-exceptions', '-fno-rtti']
+
 	# on the Switch, allow undefined symbols by default, which is needed for libsolder to work
 	# we'll specifically disallow them for the engine executable
 	# additionally, shared libs are linked without standard libs, we'll add those back in the engine wscript

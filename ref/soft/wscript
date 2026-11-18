@@ -21,7 +21,7 @@ def build(bld):
 	else:
 		libs += [ 'public', 'M' ]
 
-	bld.shlib(source   = bld.path.ant_glob('*.c'),
+	bld.shlib(source   = bld.path.ant_glob('*.cpp'),
 		target   = 'ref_soft',
 		includes = '.',
 		defines  = 'REF_DLL=1',

@@ -16,7 +16,7 @@ def configure(conf):
 	conf.env.append_unique('LINKFLAGS', '-fsanitize=fuzzer')
 
 def add_runner_target(bld, lib, func):
-	source = bld.path.ant_glob('*.c')
+	source = bld.path.ant_glob('*.cpp')
 	includes = '.'
 
 	bld.program(

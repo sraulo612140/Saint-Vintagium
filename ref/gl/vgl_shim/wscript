@@ -12,7 +12,7 @@ def configure(conf):
 def build(bld):
 	bld.env.CFLAGS_cstlib.remove('-fno-PIC')
 	bld.env.CFLAGS += ['-fPIC']
-	bld.stlib(source = bld.path.ant_glob('*.c'),
+	bld.stlib(source = bld.path.ant_glob('*.cpp'),
 		target = 'vgl_shim',
 		use = 'engine_includes sdk_includes werror',
 		includes = '.')

@@ -394,8 +394,31 @@ qboolean Mem_IsAllocatedExt( poolhandle_t poolptr, void *data );
 void Mem_PrintStats( void );
 void Mem_Stats_f( void );
 
+// Template helpers for safe void* to typed pointer conversions
+// Use: static_cast<type*>(Mem_Malloc(pool, size)) or Mem_Malloc<type>(pool, size)
+template <typename T>
+inline T* Mem_Malloc_tpl( poolhandle_t pool, size_t size ) {
+	return static_cast<T*>( _Mem_Alloc( pool, size, false, __FILE__, __LINE__ ) );
+}
+
+template <typename T>
+inline T* Mem_Calloc_tpl( poolhandle_t pool, size_t count ) {
+	return static_cast<T*>( _Mem_Alloc( pool, count * sizeof(T), true, __FILE__, __LINE__ ) );
+}
+
+template <typename T>
+inline T* Mem_Realloc_tpl( poolhandle_t pool, T* ptr, size_t new_size ) {
+	return static_cast<T*>( _Mem_Realloc( pool, ptr, new_size, true, __FILE__, __LINE__ ) );
+}
+
+// Keep original macros for backward compatibility
 #define Mem_Malloc( pool, size ) _Mem_Alloc( pool, size, false, __FILE__, __LINE__ )
 #define Mem_Calloc( pool, size ) _Mem_Alloc( pool, size, true, __FILE__, __LINE__ )
+#define Mem_Realloc( pool, ptr, size ) _Mem_Realloc( pool, ptr, size, true, __FILE__, __LINE__ )
+#define Mem_Free( mem ) _Mem_Free( mem, __FILE__, __LINE__ )
+#define Mem_Free2( ptr ) { \
+	_Mem_Free( *ptr, __FILE__, __LINE__ ); \
+	*ptr = NULL; }
 #define Mem_Realloc( pool, ptr, size ) _Mem_Realloc( pool, ptr, size, true, __FILE__, __LINE__ )
 #define Mem_Free( mem ) _Mem_Free( mem, __FILE__, __LINE__ )
 #define Mem_Free2( ptr ) { \
@@ -405,6 +428,24 @@ void Mem_Stats_f( void );
 #define Mem_AllocPool( name ) _Mem_AllocPool( name, 0, __FILE__, __LINE__ )
 #define Mem_AllocPoolExt( name, flags ) _Mem_AllocPool( name, flags, __FILE__, __LINE__ )
 #define Mem_FreePool( pool ) _Mem_FreePool( pool, __FILE__, __LINE__ )
+
+// Bitwise operators for flag enums - returns the enum type instead of int
+// Usage: FLAG_A | FLAG_B returns the enum type, not int
+#define ADDFLAGS( flags, newflags ) ( (enum flagtype_t)(((int)(flags)) | ((int)(newflags))) )
+#define REMOVEFLAGS( flags, remflags ) ( (enum flagtype_t)(((int)(flags)) & ~((int)(remflags))) )
+#define INFLAGS( flags, checkflags ) ( (enum flagtype_t)(((int)(flags)) & ((int)(checkflags))) )
+
+// Deprecated: use ADDFLAGS/REMOVEFLAGS/INFLAGS instead
+// These macros exist for backward compatibility with C code
+#ifdef __cplusplus
+#define XASH_ADDFLAGS(flags, newflags) ADDFLAGS(flags, newflags)
+#define XASH_REMOVEFLAGS(flags, remflags) REMOVEFLAGS(flags, remflags)
+#define XASH_INFLAGS(flags, checkflags) INFLAGS(flags, checkflags)
+#else
+#define XASH_ADDFLAGS(flags, newflags) ((flags) | (newflags))
+#define XASH_REMOVEFLAGS(flags, remflags) ((flags) & ~(remflags))
+#define XASH_INFLAGS(flags, checkflags) ((flags) & (checkflags))
+#endif
 #define Mem_EmptyPool( pool ) _Mem_EmptyPool( pool, __FILE__, __LINE__ )
 #define Mem_IsAllocated( mem ) Mem_IsAllocatedExt( NULL, mem )
 #define Mem_Check() _Mem_Check( __FILE__, __LINE__ )
@@ -585,7 +626,7 @@ static inline qboolean Host_IsQuakeCompatible( void )
 }
 
 void Host_ShutdownWithReason( const char *reason );
-int EXPORT Host_Main( int argc, char **argv, const char *progname, int bChangeGame, pfnChangeGame func );
+extern "C" int EXPORT Host_Main( int argc, char **argv, const char *progname, int bChangeGame, pfnChangeGame func );
 void Host_EndGame( qboolean abort, const char *message, ... ) FORMAT_CHECK( 2 );
 void Host_AbortCurrentFrame( void ) NORETURN;
 void Host_WriteServerConfig( const char *name );
